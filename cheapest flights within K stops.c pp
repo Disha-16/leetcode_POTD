@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+         vector<int> cost(n, INT_MAX);
+    cost[src] = 0;
+
+    // Bellman-Ford algorithm: relax edges up to K + 1 times
+    for (int i = 0; i <= k; i++) {
+        vector<int> tempCost(cost);
+        for (const auto& f : flights) {
+            int u = f[0], v = f[1], w = f[2];
+            if (cost[u] == INT_MAX) continue; // Skip if source city u has no known cost yet
+            tempCost[v] = min(tempCost[v], cost[u] + w);
+        }
+        cost = tempCost;
+    }
+
+    return cost[dst] == INT_MAX ? -1 : cost[dst];
+        
+    }
+};
